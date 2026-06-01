@@ -2,34 +2,34 @@ name: Daily Bitcoin Data Collection
 
 on:
   schedule:
-      - cron: '0 9 * * *'  # Run every day at 9:00 AM UTC
-        workflow_dispatch:  # Allow manual trigger
+    - cron: '0 9 * * *'  # Run every day at 9:00 AM UTC
+  workflow_dispatch:  # Allow manual trigger
 
-        jobs:
-          collect-bitcoin-data:
-              runs-on: ubuntu-latest
-
-                      steps:
-                            - name: Checkout code
-                                    uses: actions/checkout@v3
-
-                                                - name: Set up Python
-                                                        uses: actions/setup-python@v4
-                                                                with:
-                                                                          python-version: '3.11'
-
-                                                                                      - name: Install dependencies
-                                                                                              run: |
-                                                                                                        python -m pip install --upgrade pip
-                                                                                                                  pip install requests
-                                                                                                                        
-                                                                                                                              - name: Run Bitcoin data collection script
-                                                                                                                                      run: python project1.py
-                                                                                                                                            
-                                                                                                                                                  - name: Commit and push changes
-                                                                                                                                                          run: |
-                                                                                                                                                                    git config --local user.email "action@github.com"
-                                                                                                                                                                              git config --local user.name "GitHub Action"
-                                                                                                                                                                                        git add bitcoin_pricing_data.txt
-                                                                                                                                                                                                  git commit -m "Daily Bitcoin data update - $(date)" || true
-                                                                                                                                                                                                            git push
+jobs:
+  collect-bitcoin-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+      
+      - name: Run Bitcoin data collection script
+        run: python project1.py
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add bitcoin_pricing_data.txt
+          git commit -m "Daily Bitcoin data update - $(date)" || true
+          git push
