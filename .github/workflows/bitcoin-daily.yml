@@ -27,9 +27,13 @@ jobs:
         run: python project1.py
       
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git config --local credential.helper store
+          echo "https://github:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git add bitcoin_pricing_data.txt
           git commit -m "Daily Bitcoin data update - $(date)" || true
-          git push
+          git push origin main
